@@ -93,6 +93,6 @@ public class SearchOrdersFormController {
                 unitPrice.setText(String.valueOf(allOrderDetails.get(i).getUnitPrice()));
             }
         }
-
+//
     }
 }
