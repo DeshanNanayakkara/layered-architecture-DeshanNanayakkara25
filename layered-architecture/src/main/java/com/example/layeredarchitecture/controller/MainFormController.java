@@ -1,5 +1,8 @@
 package com.example.layeredarchitecture.controller;
 
+import com.example.layeredarchitecture.dao.custom.QueryDao;
+import com.example.layeredarchitecture.dao.custom.impl.QueryDaoImpl;
+import com.example.layeredarchitecture.model.CustomDto;
 import javafx.animation.FadeTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
@@ -18,6 +21,8 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -37,15 +42,33 @@ public class MainFormController {
     @FXML
     private Label lblDescription;
 
-
+    QueryDao queryDao = new QueryDaoImpl();
     /**
      * Initializes the controller class.
      */
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize() throws SQLException, ClassNotFoundException {
+        executeJoinQuery();
+    }
+
+    private void executeJoinQuery() throws SQLException, ClassNotFoundException {
+        List<CustomDto> dtoList = queryDao.customerOrderDetails();
+        for (CustomDto dto : dtoList){
+            System.out.print(dto.getCustomerId()+"-");
+            System.out.print(dto.getCustomerName()+"-");
+            System.out.print(dto.getCustomerAddress()+"-");
+            System.out.print(dto.getOrderId()+"-");
+            System.out.print(dto.getOrderDate());
+            System.out.println();
+        }
+
+    }
+
+    public void initialize(URL url, ResourceBundle rb) throws SQLException, ClassNotFoundException {
         FadeTransition fadeIn = new FadeTransition(Duration.millis(2000), root);
         fadeIn.setFromValue(0.0);
         fadeIn.setToValue(1.0);
         fadeIn.play();
+
     }
 
     @FXML
@@ -103,7 +126,8 @@ public class MainFormController {
 
 
     @FXML
-    private void navigate(MouseEvent event) throws IOException {
+    private void navigate(MouseEvent event) throws IOException, SQLException, ClassNotFoundException {
+
         if (event.getSource() instanceof ImageView) {
             ImageView icon = (ImageView) event.getSource();
 
@@ -120,7 +144,7 @@ public class MainFormController {
                     root = FXMLLoader.load(this.getClass().getResource("/com/example/layeredarchitecture/place-order-form.fxml"));
                     break;
                 case "imgViewOrders":
-                    root = FXMLLoader.load(this.getClass().getResource("/com/example/layeredarchitecture/Search-Orders.fxml"));
+                    root = null;
                     break;
             }
 

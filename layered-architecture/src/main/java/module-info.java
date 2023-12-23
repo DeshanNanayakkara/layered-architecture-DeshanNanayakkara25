@@ -10,4 +10,6 @@ module com.example.layeredarchitecture {
 
     exports com.example.layeredarchitecture;
     exports com.example.layeredarchitecture.controller;
+    exports com.example.layeredarchitecture.dao.custom;
+    opens com.example.layeredarchitecture.dao.custom to javafx.fxml;
 }
